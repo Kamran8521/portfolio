@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kamran Jouhar — WordPress Developer</title>
+<meta name="description" content="Miangul Kamran Jouhar, WordPress developer building Elementor, WooCommerce and Stripe websites, currently with Manchester Medical Academy.">
+<meta property="og:title" content="Kamran Jouhar — WordPress Developer">
+<meta property="og:description" content="Elementor, WooCommerce & Stripe websites that are fast and easy to manage.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✏️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Kalam:wght@300;400;700&family=Permanent+Marker&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   EDIT ME: colours. Everything else lives in the CONFIG
+   object at the bottom of this file.
+   ========================================================= */
+:root{
+  --paper:#f6f6f4;
+  --ink:#151515;
+  --ink-soft:#555;
+  --line:#2a2a2a;
+  --hatch:#d4d4d0;
+  --yellow:#ffe500;
+  --yellow-soft:#fff6a8;
+  --red:#e3262e;
+  --wp:#21759b;          /* WordPress blue, used sparingly */
+  --device:#cfc8bb;
+  --hand:'Caveat',cursive;
+  --body:'Kalam',cursive;
+  --marker:'Permanent Marker',cursive;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-weight:300;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img,svg{display:block}
+::selection{background:var(--yellow)}
+
+/* wobbly hand-drawn edge (svg filter defined in body) */
+.sketch{filter:url(#wobble)}
+
+/* ---------- NAV ---------- */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:18px clamp(16px,4vw,40px);background:linear-gradient(var(--paper) 60%,transparent)}
+.logo{display:flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:6px;padding:4px 14px 4px 6px;background:#fff;box-shadow:3px 3px 0 var(--line);font-family:var(--marker);font-size:18px;transform:rotate(-1.5deg);transition:transform .2s}
+.logo:hover{transform:rotate(1deg) scale(1.04)}
+.logo svg{width:30px;height:30px}
+.links{display:flex;gap:10px}
+.links a{position:relative;font-family:var(--hand);font-weight:700;font-size:20px;padding:2px 14px;line-height:1.2}
+.links a::before{content:"";position:absolute;inset:0;border:1.8px solid var(--line);border-radius:50%;transform:rotate(-3deg)}
+.links a:nth-child(even)::before{transform:rotate(2deg)}
+.links a:hover::before{background:var(--yellow);z-index:-1}
+@media (max-width:640px){.links a{font-size:17px;padding:2px 9px}.links{gap:4px}.logo span{display:none}.logo{padding:4px 6px}}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 16px 10vh;overflow:hidden}
+.bgword{position:absolute;top:22vh;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:var(--hand);font-weight:700;font-size:clamp(110px,20vw,300px);color:var(--yellow-soft);line-height:1;pointer-events:none;user-select:none;animation:drift 18s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translateX(-56%)}}
+
+.lanyard{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;transform-origin:top center;animation:swing 4.5s ease-in-out infinite;margin-top:-2px}
+@keyframes swing{0%,100%{transform:rotate(2.2deg)}50%{transform:rotate(-2.2deg)}}
+.strap{width:22px;height:clamp(110px,18vh,190px);background:linear-gradient(90deg,#b5121a,var(--red) 30%,var(--red) 70%,#b5121a)}
+.clip{width:30px;height:36px;margin-top:-4px;border:4px solid #aaa;border-radius:12px 12px 14px 14px;background:linear-gradient(#eee,#bbb)}
+.badge{margin-top:-6px;width:min(280px,72vw);background:rgba(255,255,255,.75);backdrop-filter:blur(6px);border:1px solid #ddd;border-radius:10px;padding:14px 14px 18px;box-shadow:0 20px 40px -12px rgba(0,0,0,.25);transition:transform .25s}
+.badge-hole{width:46px;height:8px;border-radius:8px;background:var(--paper);border:1px solid #ccc;margin:0 auto 10px}
+.badge-photo{position:relative;aspect-ratio:4/5;border-radius:4px;background:var(--yellow);overflow:hidden;display:grid;place-items:center}
+.badge-photo svg{width:78%}
+.badge-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:30% 30%;transform:scale(1.35);transform-origin:38% 30%}
+.sticky{position:absolute;top:10px;left:-8px;transform:rotate(-6deg);background:var(--yellow);border:1.5px solid var(--ink);padding:3px 10px 3px 30px;font-family:var(--hand);font-weight:700;font-size:17px;z-index:3;box-shadow:2px 2px 0 var(--ink)}
+.sticky svg{position:absolute;left:4px;top:2px;width:22px;height:22px}
+.badge-meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.04em}
+.badge-meta b{color:var(--wp)}
+
+.hello{position:relative;z-index:2;text-align:center;margin-top:34px}
+.hello h1{font-family:var(--marker);font-size:clamp(46px,9vw,96px);font-weight:400;line-height:1;letter-spacing:.02em}
+.hello p{font-size:clamp(16px,2vw,20px);margin-top:12px;max-width:560px}
+.hello .hi{font-family:var(--hand);font-size:24px;color:var(--ink-soft)}
+.scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-family:var(--hand);font-size:18px;color:var(--ink-soft);display:flex;flex-direction:column;align-items:center;gap:2px}
+.scroll-hint svg{width:16px;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(6px)}}
+
+/* ---------- SECTION HEADERS ---------- */
+.section{padding:110px clamp(16px,4vw,40px)}
+.wrap{max-width:1180px;margin:0 auto}
+.head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:46px}
+.head h2{font-family:var(--marker);font-weight:400;font-size:clamp(34px,5vw,56px);line-height:1.05}
+.head h2 mark{background:linear-gradient(transparent 55%,var(--yellow) 55% 90%,transparent 90%);color:inherit;padding:0 4px}
+.head p{font-family:var(--hand);font-size:24px;color:var(--ink-soft)}
+
+/* ---------- WORK ---------- */
+.works{display:grid;grid-template-columns:repeat(12,1fr);gap:70px 28px}
+.work{position:relative;grid-column:span 12}
+.work.w7{grid-column:span 7}.work.w5{grid-column:span 5;margin-top:120px}
+.work.w6{grid-column:span 6}.work.w6b{grid-column:span 6;margin-top:80px}
+@media (max-width:820px){.work,.work.w7,.work.w5,.work.w6,.work.w6b{grid-column:span 12;margin-top:0}}
+.frame{position:relative;aspect-ratio:16/10;border:2px solid var(--line);border-radius:3px;background:repeating-linear-gradient(-45deg,transparent 0 9px,var(--hatch) 9px 10.5px);overflow:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.work:nth-child(odd) .frame{transform:rotate(-.6deg)}
+.work:nth-child(even) .frame{transform:rotate(.5deg)}
+.work:hover .frame{transform:rotate(0) translateY(-6px);box-shadow:8px 10px 0 var(--ink)}
+.frame svg.x{position:absolute;inset:0;width:100%;height:100%}
+.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.frame .label{position:absolute;top:14px;left:14px;display:flex;align-items:center;gap:6px;background:var(--yellow);padding:2px 12px 2px 4px;font-family:var(--hand);font-weight:700;font-size:18px;border:1.5px solid var(--ink)}
+.frame .label svg{width:22px;height:22px}
+.frame .peek{position:absolute;inset:auto 14px 14px auto;font-family:var(--mono);font-size:12px;background:var(--ink);color:#fff;padding:6px 10px;border-radius:4px;opacity:0;transform:translateY(8px);transition:.3s}
+.work:hover .peek{opacity:1;transform:none}
+.meta{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-top:12px}
+.meta h3{font-family:var(--body);font-weight:700;font-size:22px;line-height:1.2}
+.meta p{font-size:15px;color:var(--ink-soft)}
+.visit{display:inline-block;margin-top:6px;font-family:var(--hand);font-weight:700;font-size:19px;border-bottom:1.6px solid var(--ink)}
+.visit:hover{background:var(--yellow)}
+.frame img{object-position:top center;filter:saturate(.9)}
+.tag{flex-shrink:0;position:relative;font-family:var(--hand);font-weight:700;font-size:18px;padding:0 14px;white-space:nowrap}
+.tag::before{content:"";position:absolute;inset:-2px -2px;border:1.6px solid var(--line);border-radius:50%;transform:rotate(-4deg)}
+.note{position:absolute;font-family:var(--hand);font-size:22px;color:var(--ink-soft);display:flex;align-items:center;gap:6px;pointer-events:none}
+.note svg{width:60px;height:40px}
+@media (max-width:820px){.note{display:none}}
+
+/* ---------- WP-CLI DEVICE ---------- */
+.lab{text-align:center}
+.lab .head{justify-content:center;text-align:center;flex-direction:column;align-items:center}
+.device{display:inline-flex;align-items:center;gap:26px;background:linear-gradient(160deg,#ddd7cb,var(--device));padding:24px 26px 34px;border-radius:22px;box-shadow:inset 0 2px 0 rgba(255,255,255,.6),inset 0 -4px 0 rgba(0,0,0,.08),0 30px 50px -20px rgba(0,0,0,.35);position:relative;text-align:left;max-width:100%}
+.device::after{content:"WP-CLI";position:absolute;bottom:9px;left:0;right:0;text-align:center;font-family:var(--mono);font-weight:700;font-size:11px;letter-spacing:.35em;color:#7a7468}
+.screen{width:min(440px,62vw);aspect-ratio:4/3;background:#0d1117;border-radius:10px;border:8px solid #1d1d1d;padding:14px 16px;font-family:var(--mono);font-size:13px;color:#c9d1d9;overflow:hidden;position:relative}
+.screen .bar{display:flex;justify-content:space-between;color:#6e7681;font-size:11px;margin-bottom:10px}
+.screen .cmd{color:#7ee787;white-space:pre-wrap;word-break:break-word}
+.screen .cmd::before{content:"$ ";color:#6e7681}
+.screen .out{margin-top:10px;white-space:pre-wrap;line-height:1.55}
+.screen .out .ok{color:#7ee787}.screen .out .hl{color:var(--yellow)}.screen .out .dim{color:#6e7681}
+.cursor{display:inline-block;width:8px;height:14px;background:#c9d1d9;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.pad{display:flex;flex-direction:column;align-items:center;gap:16px}
+.dpad{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#5a5a5a,#2c2c2c);display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;justify-items:center;box-shadow:0 6px 12px rgba(0,0,0,.3)}
+.dpad button{background:none;border:0;color:#ddd;font-size:14px;cursor:pointer;width:100%;height:100%;border-radius:50%}
+.dpad button:hover{color:var(--yellow)}
+.dpad .okb{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#777,#444);font-family:var(--mono);font-weight:700;font-size:12px;box-shadow:inset 0 -2px 0 rgba(0,0,0,.3)}
+.reset{width:30px;height:30px;border-radius:50%;border:0;background:radial-gradient(circle at 40% 35%,#62c46a,#2f8a3a);color:#fff;font-size:13px;cursor:pointer;box-shadow:0 3px 6px rgba(0,0,0,.25)}
+.lab .hint{margin-top:28px;font-family:var(--hand);font-size:22px;color:var(--ink-soft);display:flex;justify-content:center;align-items:center;gap:8px}
+.lab .hint svg{width:56px;height:30px}
+@media (max-width:700px){.device{flex-direction:column;gap:18px;padding:18px 16px 32px}.screen{width:min(440px,80vw);font-size:12px}.pad{flex-direction:row}}
+
+/* ---------- STACK MARQUEE ---------- */
+.stack{padding:30px 0 10px;overflow:hidden}
+.belt{display:flex;gap:18px;width:max-content;animation:belt 40s linear infinite;padding:10px 0}
+.belt.rev{animation-direction:reverse;animation-duration:46s}
+@keyframes belt{to{transform:translateX(-50%)}}
+.chip{font-family:var(--hand);font-weight:700;font-size:26px;padding:6px 22px;border:2px solid var(--line);border-radius:40px;background:#fff;white-space:nowrap;box-shadow:3px 3px 0 var(--line)}
+.chip:nth-child(3n){background:var(--yellow)}
+.chip:nth-child(4n){transform:rotate(-2deg)}
+.chip:nth-child(5n){transform:rotate(2deg)}
+
+/* ---------- ABOUT / PROCESS ---------- */
+.about-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:start}
+@media (max-width:820px){.about-grid{grid-template-columns:1fr;gap:40px}}
+.about-text p{font-size:clamp(18px,2.1vw,23px);margin-bottom:18px}
+.about-text p u{text-decoration:none;background:linear-gradient(transparent 60%,var(--yellow) 60%)}
+.stats{display:flex;gap:16px;flex-wrap:wrap;margin-top:26px}
+.stat{border:2px dashed var(--line);border-radius:8px;padding:10px 18px;min-width:120px}
+.stat b{display:block;font-family:var(--marker);font-weight:400;font-size:34px;line-height:1}
+.stat span{font-family:var(--hand);font-size:19px;color:var(--ink-soft)}
+.steps{list-style:none;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding:16px 0 16px 64px;border-bottom:1.5px dashed #bbb}
+.steps li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:14px;font-family:var(--marker);font-size:26px;width:48px;height:48px;display:grid;place-items:center;border:2px solid var(--line);border-radius:50%;background:#fff}
+.steps li:nth-child(2)::before{background:var(--yellow)}
+.steps h4{font-family:var(--body);font-weight:700;font-size:20px}
+.steps p{font-size:16px;color:var(--ink-soft)}
+
+/* ---------- CONTACT NOTEBOOK ---------- */
+.book{display:grid;grid-template-columns:1fr 1fr;max-width:980px;margin:0 auto;box-shadow:0 30px 60px -25px rgba(0,0,0,.35);border-radius:6px;position:relative}
+.book .left{background:var(--yellow);border-radius:6px 0 0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;gap:14px}
+.book .left svg{width:min(240px,60%)}
+.book .left h3{font-family:var(--marker);font-weight:400;font-size:clamp(28px,3.4vw,40px)}
+.book .left p{font-family:var(--hand);font-size:22px;text-align:center}
+.book .right{background:#fbfbfa;border-radius:0 6px 6px 0;padding:44px clamp(20px,4vw,48px)}
+.rings{position:absolute;left:50%;top:24px;bottom:24px;transform:translateX(-50%);display:flex;flex-direction:column;justify-content:space-between;z-index:2}
+.rings i{display:block;width:26px;height:10px;border:3px solid #333;border-radius:6px;background:linear-gradient(#999,#555)}
+.pill-title{display:inline-block;background:var(--ink);color:#fff;font-family:var(--hand);font-weight:700;font-size:20px;padding:0 14px;border-radius:30px;transform:rotate(-2deg);margin-bottom:22px}
+.field{margin-bottom:22px}
+.field input,.field textarea,.field select{width:100%;border:0;border-bottom:1.6px solid var(--line);background:transparent;font-family:var(--hand);font-size:24px;padding:6px 4px;outline:none;color:var(--ink);resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{border-bottom-color:var(--wp);background:linear-gradient(transparent 70%,var(--yellow-soft))}
+.field ::placeholder{color:#999}
+.send{display:flex;justify-content:flex-end}
+.send button{position:relative;border:0;background:none;cursor:pointer;font-family:var(--hand);font-weight:700;font-size:24px;padding:8px 30px;color:var(--ink)}
+.send button::before{content:"";position:absolute;inset:0;background:var(--yellow);border:2px solid var(--ink);border-radius:50%;transform:rotate(-4deg);z-index:-1;transition:transform .2s}
+.send button:hover::before{transform:rotate(3deg) scale(1.08)}
+.send button{z-index:0}
+.contacts{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;border-top:1.5px solid #ddd;margin-top:26px;padding-top:16px;font-family:var(--hand);font-weight:700;font-size:20px}
+.contacts a{border-bottom:1.6px solid var(--ink)}
+.contacts a:hover{background:var(--yellow)}
+.contacts .socials{display:flex;gap:16px}
+.sent{display:none;font-family:var(--hand);font-size:22px;color:var(--wp);margin-top:12px;text-align:right}
+@media (max-width:760px){.book{grid-template-columns:1fr}.book .left{border-radius:6px 6px 0 0}.book .right{border-radius:0 0 6px 6px}.rings{left:24px;right:24px;top:auto;bottom:auto;transform:none;flex-direction:row;top:calc(var(--lh,330px) - 13px);display:none}}
+
+/* ---------- FOOTER ---------- */
+footer{padding:120px clamp(16px,4vw,40px) 40px;text-align:center;overflow:hidden}
+.big{font-family:var(--marker);font-weight:400;font-size:clamp(52px,12vw,170px);line-height:.95}
+.big span{display:inline-block;background:var(--yellow);padding:0 .15em;transform:rotate(-2deg)}
+.foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;max-width:1180px;margin:90px auto 0;font-family:var(--hand);font-size:20px;font-weight:700}
+.foot nav{display:flex;gap:18px}
+.foot nav a:hover{text-decoration:underline wavy var(--yellow)}
+.foot small{font-family:var(--body);font-weight:300;font-size:14px;color:var(--ink-soft)}
+
+/* reveal on scroll */
+.rv{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- hand-drawn wobble filter -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter>
+  <symbol id="face" viewBox="0 0 120 120">
+    <!-- doodle avatar: swap for your own photo/illustration anytime -->
+    <path d="M22 58c-6-20 6-40 26-44 6-8 22-9 30-2 14-2 26 10 24 24 8 8 6 20-2 24" fill="#151515"/>
+    <ellipse cx="60" cy="66" rx="34" ry="38" fill="#fff" stroke="#151515" stroke-width="4"/>
+    <path d="M28 52c8-4 16-14 18-22 10 10 30 12 44 6 2 6 4 10 4 16 4-14-2-34-24-38C48 10 26 24 28 52z" fill="#151515"/>
+    <ellipse cx="25" cy="70" rx="6" ry="9" fill="#fff" stroke="#151515" stroke-width="4"/>
+    <ellipse cx="95" cy="70" rx="6" ry="9" fill="#fff" stroke="#151515" stroke-width="4"/>
+    <circle cx="48" cy="66" r="4" fill="#151515"/><circle cx="74" cy="66" r="4" fill="#151515"/>
+    <path d="M60 70c-3 6-2 10 3 10" fill="none" stroke="#151515" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M47 86c8 8 22 8 28-1" fill="none" stroke="#151515" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="arrow" viewBox="0 0 60 40"><path d="M56 34C40 34 18 30 8 8M8 8l-2 12M8 8l11 4" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"/></symbol>
+</svg>
+
+<header class="nav">
+  <a href="#top" class="logo"><svg><use href="#face"/></svg><span data-c="short"></span></a>
+  <nav class="links">
+    <a href="#about">about</a>
+    <a href="#work">work</a>
+    <a href="#lab">services</a>
+    <a href="#contact">contact</a>
+  </nav>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="bgword" data-c="bgword"></div>
+
+  <div class="lanyard" id="lanyard">
+    <div class="strap"></div>
+    <div class="clip"></div>
+    <div class="badge" id="badge">
+      <div class="badge-hole"></div>
+      <div class="badge-photo">
+        <div class="sticky"><svg><use href="#face"/></svg><span data-c="sticky"></span></div>
+        <img src="images/kamran.jpg" alt="Photo of Kamran" class="badge-img">
+      </div>
+      <div class="badge-meta"><span>ID // <b>WP-DEV</b></span><span data-c="since"></span></div>
+    </div>
+  </div>
+
+  <div class="hello">
+    <div class="hi">hello!! 👋</div>
+    <h1>I'M <span data-c="nameUpper"></span></h1>
+    <p data-c="tagline"></p>
+  </div>
+  <a href="#work" class="scroll-hint">scroll<svg viewBox="0 0 16 24"><path d="M8 2v18M2 14l6 6 6-6" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"/></svg></a>
+</section>
+
+<!-- ================= WORK ================= -->
+<section class="section" id="work">
+  <div class="wrap">
+    <div class="head rv">
+      <h2>Selected <mark>WordPress</mark> work</h2>
+      <p data-c="workRange"></p>
+    </div>
+    <div class="works" id="works"></div>
+  </div>
+</section>
+
+<!-- ================= STACK ================= -->
+<div class="stack" aria-label="Tools I use">
+  <div class="belt" id="belt1"></div>
+  <div class="belt rev" id="belt2"></div>
+</div>
+
+<!-- ================= WP-CLI SERVICES ================= -->
+<section class="section lab" id="lab">
+  <div class="wrap">
+    <div class="head rv">
+      <h2>What I can <mark>install</mark> for you</h2>
+      <p>services, but make it a terminal</p>
+    </div>
+    <div class="device rv">
+      <div class="screen" aria-live="polite">
+        <div class="bar"><span>~/client-site</span><span id="counter">001-006</span></div>
+        <div class="cmd" id="cmd"></div>
+        <div class="out" id="out"></div>
+      </div>
+      <div class="pad">
+        <div class="dpad">
+          <span></span><span></span><span></span>
+          <button id="prev" aria-label="Previous service">◀</button>
+          <button class="okb" id="run" aria-label="Run command">OK</button>
+          <button id="next" aria-label="Next service">▶</button>
+          <span></span><span></span><span></span>
+        </div>
+        <button class="reset" id="clear" aria-label="Clear screen">⟲</button>
+      </div>
+    </div>
+    <div class="hint"><svg><use href="#arrow"/></svg>press OK to run it</div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="section" id="about">
+  <div class="wrap about-grid">
+    <div class="about-text rv">
+      <div class="head" style="margin-bottom:28px"><h2>A bit <mark>about me</mark></h2></div>
+      <div id="aboutText"></div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="rv">
+      <div class="head" style="margin-bottom:12px"><p>how a project usually goes</p></div>
+      <ol class="steps" id="steps"></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="section" id="contact">
+  <div class="book rv">
+    <div class="left">
+      <svg viewBox="0 0 120 120" class="sketch"><use href="#face"/></svg>
+      <h3>I'M <span data-c="nameUpper"></span></h3>
+      <p>got a WordPress site that needs<br>building, fixing or speeding up?</p>
+    </div>
+    <div class="rings" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="right">
+      <span class="pill-title">Let's talk!</span>
+      <form id="form">
+        <div class="field"><input name="name" placeholder="Your name" required></div>
+        <div class="field"><input name="email" type="email" placeholder="Email" required></div>
+        <div class="field">
+          <select name="type" aria-label="Project type">
+            <option>New WordPress website</option>
+            <option>WooCommerce store</option>
+            <option>Fix / speed up my site</option>
+            <option>Custom plugin or blocks</option>
+            <option>Ongoing maintenance</option>
+          </select>
+        </div>
+        <div class="field"><textarea name="message" rows="3" placeholder="Tell me about the project"></textarea></div>
+        <div class="send"><button type="submit">Send it →</button></div>
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+        <div class="sent" id="sent" role="status"></div>
+      </form>
+      <div class="contacts">
+        <a data-c="emailLink"></a>
+        <div class="socials" id="socials"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="big rv">Let's build<br><span>something</span></div>
+  <div class="foot">
+    <a href="#top" data-c="name"></a>
+    <nav><a href="#about">about</a><a href="#work">work</a><a href="#lab">services</a><a href="#contact">contact</a></nav>
+    <small>© <span id="yr"></span> · built with love (and a lot of hooks)</small>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   CONFIG: edit this block to make the site yours.
+   For a real project screenshot, add  image: "images/foo.jpg"
+   ========================================================= */
+const CONFIG = {
+  name: "Miangul Kamran Jouhar",
+  shortName: "Kamran",
+  bgword: "wordpress dev",
+  sticky: "need a website?",
+  since: "since 2025",
+  tagline: "A WordPress developer building fast, bookable, easy-to-manage websites, currently powering course sites for Manchester Medical Academy.",
+  email: "kamranjouhar37@gmail.com",
+  socials: [
+    { label: "linkedin", url: "https://www.linkedin.com/in/miangul-kamran-jouhar-8928a7298/" }
+  ],
+  workRange: "real sites, live right now",
+  projects: [
+    { title: "Manchester Medical Academy", tag: "woocommerce", url: "https://manchestermedicalacademy.co.uk/", image: "images/manchester-medical-academy.jpg",
+      desc: "Main site for a medical education academy: ultrasound and emergency-medicine courses that doctors can browse, book and pay for online.",
+      size: "w7", stack: "Astra · Elementor · WooCommerce · LiteSpeed", note: "where I work now" },
+    { title: "MAPS Courses", tag: "elementor", url: "https://mapscourses.co.uk/", image: "images/maps-courses.jpg",
+      desc: "Procedural-skills and simulation courses (suturing, chest drains, safe sedation) with Stripe checkout and course videos.",
+      size: "w5", stack: "Elementor Pro · WooCommerce · Stripe · WPForms" },
+    { title: "BookCPD (MedCPD)", tag: "directory", url: "https://bookcpd.co.uk/", image: "images/bookcpd.jpg",
+      desc: "A searchable CPD course marketplace for UK doctors: filter by specialty, date, price and location, with listings from several providers.",
+      size: "w6", stack: "Hello Elementor · Directorist · custom styling", note: "my favourite" },
+    { title: "HALO Courses", tag: "woocommerce", url: "https://mashcourses.co.uk/",
+      desc: "Booking site for HALO (High Acuity, Low Occurrence) procedures training. Being rebuilt right now.",
+      size: "w6b", stack: "Elementor · WooCommerce", note: "relaunching soon" }
+  ],
+  stack: ["WordPress","Elementor Pro","WooCommerce","Stripe","Astra","Gutenberg","PHP","HTML & CSS","JavaScript","Directorist","WPForms","LiteSpeed Cache","Jetpack","Google Site Kit","MySQL","cPanel"],
+  about: [
+    "Hi, I'm Kamran, a WordPress developer with <u>2 years of hands-on experience</u> building real, revenue-earning sites.",
+    "I currently work with <u>Manchester Medical Academy</u>, where I build and run the websites for the academy and its partner course providers. That includes WooCommerce course booking, Stripe payments, a multi-provider CPD directory, and keeping everything fast and up to date.",
+    "I like sites that are quick to load, easy for clients to edit, and that just work when someone's trying to book."
+  ],
+  stats: [ ["2+","years in WordPress"], ["4","live sites"], ["16+","courses bookable online"] ],
+  steps: [
+    ["Chat & plan",      "We talk goals, pages, content and budget. I send a clear scope."],
+    ["Design → build",   "Elementor or blocks, set up so you can edit everything yourself."],
+    ["Launch",           "Payments, speed, SEO basics, security and backups, then go live."],
+    ["Hand-off & care",  "A walkthrough for your team, plus optional ongoing maintenance."]
+  ],
+  services: [
+    { cmd: "wp plugin install elementor-pro --activate", out: [["ok","Success:"]," Custom Elementor websites.\n",["dim","→ "],"designed around your brand\n",["dim","→ "],"fully responsive, mobile first\n",["hl","✓ "],"you can edit every page yourself"] },
+    { cmd: "wp plugin install woocommerce woocommerce-gateway-stripe", out: [["ok","Success:"]," Online shop & bookings.\n",["dim","→ "],"courses, events or products\n",["dim","→ "],"Stripe card payments\n",["hl","✓ "],"order emails & checkout tweaks"] },
+    { cmd: "wp plugin install directorist --activate",  out: [["ok","Success:"]," Directories & listings.\n",["dim","→ "],"search + filters (date, price, location)\n",["dim","→ "],"multiple providers, one site\n",["hl","✓ "],"like bookcpd.co.uk"] },
+    { cmd: "wp scaffold block --custom",                 out: [["ok","Success:"]," Custom blocks & small plugins.\n",["dim","→ "],"Gutenberg blocks for your editors\n",["dim","→ "],"glue code between tools\n",["hl","✓ "],"no more copy-pasting"] },
+    { cmd: "wp litespeed-purge all && wp optimize",      out: [["ok","Success:"]," Speed & performance.\n",["dim","→ "],"caching, image optimisation\n",["dim","→ "],"lighter pages, faster checkout\n",["hl","✓ "],"better Core Web Vitals"] },
+    { cmd: "wp cron event schedule care-plan monthly",   out: [["ok","Success:"]," Ongoing maintenance.\n",["dim","→ "],"updates, backups, uptime checks\n",["dim","→ "],"security hardening\n",["hl","✓ "],"small edits included"] }
+  ]
+};
+
+/* ================= render ================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const short = CONFIG.shortName || CONFIG.name;
+const fill = {
+  name: CONFIG.name, short, nameUpper: short.toUpperCase(), bgword: CONFIG.bgword,
+  sticky: CONFIG.sticky, since: CONFIG.since, tagline: CONFIG.tagline, workRange: CONFIG.workRange
+};
+document.querySelectorAll('[data-c]').forEach(el => {
+  const k = el.dataset.c;
+  if (k === 'emailLink') { el.textContent = CONFIG.email; el.href = 'mailto:' + CONFIG.email; }
+  else if (fill[k] != null) el.textContent = fill[k];
+});
+$('#yr').textContent = new Date().getFullYear();
+$('#socials').innerHTML = CONFIG.socials.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join('');
+
+// projects
+const notePos = ['top:-46px;right:6%', 'bottom:-50px;left:10%', 'top:-46px;left:4%'];
+let n = 0;
+$('#works').innerHTML = CONFIG.projects.map(p => {
+  const media = p.image
+    ? `<img src="${esc(p.image)}" alt="${esc(p.title)} website" loading="lazy">`
+    : `<svg class="x" viewBox="0 0 100 62" preserveAspectRatio="none"><path d="M0 0L100 62M100 0L0 62" stroke="#2a2a2a" stroke-width=".35" vector-effect="non-scaling-stroke" fill="none"/></svg>`;
+  const note = p.note ? `<div class="note" style="${notePos[n++ % 3]}"><svg><use href="#arrow"/></svg>${esc(p.note)}</div>` : '';
+  return `<article class="work ${p.size} rv">
+    ${note}
+    <div class="frame">${media}
+      <div class="label"><svg><use href="#face"/></svg>${esc(p.title)}</div>
+      <div class="peek">${esc(p.stack)}</div>
+    </div>
+    <div class="meta"><div><h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p>${p.url ? `<a class="visit" href="${esc(p.url)}" target="_blank" rel="noopener">visit site ↗</a>` : ''}</div><span class="tag">${esc(p.tag)}</span></div>
+  </article>`;
+}).join('');
+
+// stack belts (duplicated for seamless loop)
+const chips = a => a.map(t => `<span class="chip">${esc(t)}</span>`).join('');
+const half = Math.ceil(CONFIG.stack.length / 2);
+const a1 = CONFIG.stack.slice(0, half), a2 = CONFIG.stack.slice(half);
+$('#belt1').innerHTML = chips(a1.concat(a1, a1, a1));
+$('#belt2').innerHTML = chips(a2.concat(a2, a2, a2));
+
+// about
+$('#aboutText').innerHTML = CONFIG.about.map(p => `<p>${p}</p>`).join('');
+$('#stats').innerHTML = CONFIG.stats.map(([b, s]) => `<div class="stat"><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join('');
+$('#steps').innerHTML = CONFIG.steps.map(([h, p]) => `<li><h4>${esc(h)}</h4><p>${esc(p)}</p></li>`).join('');
+
+/* ================= WP-CLI device ================= */
+let idx = 0, typing = null;
+const total = CONFIG.services.length, pad = x => String(x).padStart(3, '0');
+function show(i, run) {
+  clearInterval(typing);
+  idx = (i + total) % total;
+  const s = CONFIG.services[idx];
+  $('#counter').textContent = `${pad(idx + 1)}-${pad(total)}`;
+  $('#out').innerHTML = '';
+  const cmd = $('#cmd'); let c = 0;
+  cmd.innerHTML = '<span class="cursor"></span>';
+  typing = setInterval(() => {
+    c++;
+    cmd.innerHTML = esc(s.cmd.slice(0, c)) + '<span class="cursor"></span>';
+    if (c >= s.cmd.length) { clearInterval(typing); if (run) output(); }
+  }, 28);
+}
+function output() {
+  const s = CONFIG.services[idx];
+  $('#cmd').textContent = s.cmd;
+  $('#out').innerHTML = s.out.map(x => Array.isArray(x) ? `<span class="${x[0]}">${esc(x[1])}</span>` : esc(x)).join('') + '\n<span class="cursor"></span>';
+}
+$('#prev').onclick = () => show(idx - 1, false);
+$('#next').onclick = () => show(idx + 1, false);
+$('#run').onclick = () => { clearInterval(typing); output(); };
+$('#clear').onclick = () => { clearInterval(typing); $('#cmd').innerHTML = ''; $('#out').innerHTML = '<span class="cursor"></span>'; };
+let started = false;
+new IntersectionObserver(([e], o) => { if (e.isIntersecting && !started) { started = true; show(0, true); o.disconnect(); } }, { threshold: .4 }).observe($('.device'));
+
+/* ================= badge tilt follows mouse ================= */
+const badge = $('#badge');
+addEventListener('mousemove', e => {
+  const x = (e.clientX / innerWidth - .5) * 14, y = (e.clientY / innerHeight - .5) * -8;
+  badge.style.transform = `perspective(700px) rotateY(${x}deg) rotateX(${y}deg)`;
+});
+
+/* ================= contact form → mailto ================= */
+// Messages are delivered to CONFIG.email by formsubmit.co (free, no backend needed).
+$('#form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target, f = new FormData(form), sent = $('#sent'), btn = form.querySelector('button');
+  if (f.get('_honey')) return; // bot filled the hidden field
+  btn.disabled = true; btn.textContent = 'Sending…';
+  sent.style.display = 'block'; sent.textContent = '';
+  try {
+    const res = await fetch(`https://formsubmit.co/ajax/${CONFIG.email}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject: `Portfolio enquiry: ${f.get('type')} (from ${f.get('name')})`,
+        _template: 'table',
+        name: f.get('name'), email: f.get('email'), project: f.get('type'), message: f.get('message'),
+        _replyto: f.get('email')
+      })
+    });
+    const data = await res.json();
+    if (String(data.success) !== 'true') throw new Error(data.message || 'failed');
+    sent.textContent = "Thanks! Your message is on its way. I'll reply soon ✉️";
+    form.reset();
+  } catch (err) {
+    sent.innerHTML = `Hmm, that didn't send. Please email me at <a href="mailto:${esc(CONFIG.email)}" style="text-decoration:underline">${esc(CONFIG.email)}</a>`;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Send it →';
+  }
+});
+
+/* ================= reveal on scroll ================= */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
