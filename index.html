@@ -522,11 +522,19 @@ $('#form').addEventListener('submit', async e => {
         _replyto: f.get('email')
       })
     });
-    const data = await res.json();
-    if (String(data.success) !== 'true') throw new Error(data.message || 'failed');
-    sent.textContent = "Thanks! Your message is on its way. I'll reply soon ✉️";
-    form.reset();
+    const data = await res.json().catch(() => ({}));
+    if (String(data.success) === 'true') {
+      sent.textContent = "Thanks! Your message is on its way. I'll reply soon ✉️";
+      form.reset();
+    } else if (/activat/i.test(data.message || '')) {
+      // first ever submission: FormSubmit emails the site owner an activation link
+      sent.textContent = "Almost there! This form is waiting to be activated. Please try again a little later or email me directly.";
+      console.info('FormSubmit:', data.message);
+    } else {
+      throw new Error(data.message || `HTTP ${res.status}`);
+    }
   } catch (err) {
+    console.warn('Form send failed:', err.message);
     sent.innerHTML = `Hmm, that didn't send. Please email me at <a href="mailto:${esc(CONFIG.email)}" style="text-decoration:underline">${esc(CONFIG.email)}</a>`;
   } finally {
     btn.disabled = false; btn.textContent = 'Send it →';
