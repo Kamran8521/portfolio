@@ -2,6 +2,8 @@
 
 A static one-page portfolio (plain HTML/CSS/JS, no build step).
 
+**Live:** https://kamran-portfolio-mu.vercel.app. Every push to `main` deploys automatically via Vercel.
+
 ## Edit content
 All text lives in the `CONFIG` object near the bottom of `index.html`:
 name, email, socials, projects, skills, services, about text and stats.
