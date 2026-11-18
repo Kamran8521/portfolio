@@ -8,6 +8,8 @@
 <meta property="og:title" content="Kamran Jouhar — WordPress Developer">
 <meta property="og:description" content="Elementor, WooCommerce & Stripe websites that are fast and easy to manage.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✏️</text></svg>">
+<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('js')</script>
+<link rel="preload" as="image" href="images/kamran-600.jpg" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Kalam:wght@300;400;700&family=Permanent+Marker&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -59,9 +61,13 @@ img,svg{display:block}
 .bgword{position:absolute;top:22vh;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:var(--hand);font-weight:700;font-size:clamp(110px,20vw,300px);color:var(--yellow-soft);line-height:1;pointer-events:none;user-select:none;animation:drift 18s ease-in-out infinite alternate}
 @keyframes drift{to{transform:translateX(-56%)}}
 
-.lanyard{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;transform-origin:top center;animation:swing 4.5s ease-in-out infinite;margin-top:-2px}
-@keyframes swing{0%,100%{transform:rotate(2.2deg)}50%{transform:rotate(-2.2deg)}}
-.strap{width:22px;height:clamp(110px,18vh,190px);background:linear-gradient(90deg,#b5121a,var(--red) 30%,var(--red) 70%,#b5121a)}
+.lanyard{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;transform-origin:top center;margin-top:-2px;will-change:transform}
+.js .lanyard{transform:translateY(-120vh)} /* hidden until the drop-in starts */
+.strap{width:22px;height:clamp(110px,18vh,190px);transform-origin:top center;background:linear-gradient(90deg,#b5121a,var(--red) 30%,var(--red) 70%,#b5121a)}
+.hang{display:flex;flex-direction:column;align-items:center;will-change:transform}
+.badge{cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.lanyard.grabbing .badge{cursor:grabbing}
+.badge img{-webkit-user-drag:none;pointer-events:none}
 .clip{width:30px;height:36px;margin-top:-4px;border:4px solid #aaa;border-radius:12px 12px 14px 14px;background:linear-gradient(#eee,#bbb)}
 .badge{margin-top:-6px;width:min(280px,72vw);background:rgba(255,255,255,.75);backdrop-filter:blur(6px);border:1px solid #ddd;border-radius:10px;padding:14px 14px 18px;box-shadow:0 20px 40px -12px rgba(0,0,0,.25);transition:transform .25s}
 .badge-hole{width:46px;height:8px;border-radius:8px;background:var(--paper);border:1px solid #ccc;margin:0 auto 10px}
@@ -242,14 +248,17 @@ footer{padding:120px clamp(16px,4vw,40px) 40px;text-align:center;overflow:hidden
 
   <div class="lanyard" id="lanyard">
     <div class="strap"></div>
+    <div class="hang">
     <div class="clip"></div>
-    <div class="badge" id="badge">
+    <div class="badge" id="badge" title="Grab me and give me a swing">
       <div class="badge-hole"></div>
       <div class="badge-photo">
         <div class="sticky"><svg><use href="#face"/></svg><span data-c="sticky"></span></div>
-        <img src="images/kamran.jpg" alt="Photo of Kamran" class="badge-img">
+        <svg viewBox="0 0 120 120" class="sketch" aria-hidden="true"><use href="#face"/></svg>
+        <img src="images/kamran-600.jpg" alt="Photo of Kamran" class="badge-img" fetchpriority="high" draggable="false">
       </div>
       <div class="badge-meta"><span>ID // <b>WP-DEV</b></span><span data-c="since"></span></div>
+    </div>
     </div>
   </div>
 
@@ -505,9 +514,72 @@ $('#clear').onclick = () => { clearInterval(typing); $('#cmd').innerHTML = ''; $
 let started = false;
 new IntersectionObserver(([e], o) => { if (e.isIntersecting && !started) { started = true; show(0, true); o.disconnect(); } }, { threshold: .4 }).observe($('.device'));
 
-/* ================= badge tilt follows mouse ================= */
-const badge = $('#badge');
+/* ================= hanging ID badge: drop-in, bounce, drag & swing ================= */
+const badge = $('#badge'), lan = $('#lanyard'), strap = lan.querySelector('.strap'), hang = lan.querySelector('.hang');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const baseStrap = strap.offsetHeight;
+// a = swing angle (rad), y < 0 = still falling in, y > 0 = strap stretched
+const S = { a: 0, va: 0, y: reduceMotion ? 0 : -(lan.offsetTop + lan.offsetHeight + 80), vy: 0, drag: false };
+let falling = !reduceMotion, last = performance.now();
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+function render() {
+  const stretch = Math.max(S.y, 0), lift = Math.min(S.y, 0);
+  lan.style.transform = `translateY(${lift}px) rotate(${S.a}rad)`;
+  strap.style.transform = `scaleY(${(baseStrap + stretch) / baseStrap})`;
+  hang.style.transform = `translateY(${stretch}px)`;
+}
+function tick(now) {
+  const dt = Math.min((now - last) / 1000, 1 / 30); last = now;
+  if (!S.drag) {
+    // pendulum swing with a light breeze so it never looks frozen
+    const breeze = reduceMotion ? 0 : Math.sin(now / 900) * .12 + Math.sin(now / 2300) * .06;
+    S.va += (-28 * Math.sin(S.a) - 1.6 * S.va + breeze) * dt;
+    S.a += S.va * dt;
+    if (falling) {                       // free fall...
+      S.vy += 2600 * dt; S.y += S.vy * dt;
+      if (S.y >= 0) {                    // ...then the strap catches it: jerk + a little swing
+        falling = false; S.vy *= .45;
+        S.va += (Math.random() < .5 ? -1 : 1) * 1.2;
+      }
+    } else {                             // springy strap bounces back to rest
+      S.vy += (-260 * S.y - 11 * S.vy) * dt; S.y += S.vy * dt;
+    }
+  }
+  render();
+  requestAnimationFrame(tick);
+}
+render(); requestAnimationFrame(tick);
+
+// grab with mouse or finger and swing it to and fro
+let grab = null;
+function pivot() {
+  const h = lan.offsetParent.getBoundingClientRect();
+  return { x: h.left + lan.offsetLeft + lan.offsetWidth / 2, y: h.top + lan.offsetTop };
+}
+badge.addEventListener('pointerdown', e => {
+  const p = pivot(), dx = e.clientX - p.x, dy = e.clientY - p.y;
+  grab = { p, off: -Math.atan2(dx, dy) - S.a, dist: Math.hypot(dx, dy), lastA: S.a, lastT: performance.now() };
+  S.drag = true; falling = false; S.y = Math.max(S.y, 0); S.va = 0;
+  lan.classList.add('grabbing'); badge.style.transform = '';
+  badge.setPointerCapture(e.pointerId);
+});
+badge.addEventListener('pointermove', e => {
+  if (!S.drag) return;
+  const dx = e.clientX - grab.p.x, dy = e.clientY - grab.p.y, now = performance.now();
+  S.a = clamp(-Math.atan2(dx, dy) - grab.off, -1, 1);
+  S.y = clamp((Math.hypot(dx, dy) - grab.dist) * .5, 0, 60);   // pull down to stretch the strap
+  const dt = Math.max((now - grab.lastT) / 1000, .001);
+  S.va = clamp(.6 * S.va + .4 * (S.a - grab.lastA) / dt, -5.5, 5.5);
+  grab.lastA = S.a; grab.lastT = now;
+});
+const release = () => { if (!S.drag) return; S.drag = false; S.vy = 0; lan.classList.remove('grabbing'); };
+badge.addEventListener('pointerup', release);
+badge.addEventListener('pointercancel', release);
+
+// subtle 3D tilt toward the mouse (desktop)
 addEventListener('mousemove', e => {
+  if (S.drag) return;
   const x = (e.clientX / innerWidth - .5) * 14, y = (e.clientY / innerHeight - .5) * -8;
   badge.style.transform = `perspective(700px) rotateY(${x}deg) rotateX(${y}deg)`;
 });
