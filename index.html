@@ -83,6 +83,13 @@ img,svg{display:block}
 .hello h1{font-family:var(--marker);font-size:clamp(46px,9vw,96px);font-weight:400;line-height:1;letter-spacing:.02em}
 .hello p{font-size:clamp(16px,2vw,20px);margin-top:12px;max-width:560px}
 .hello .hi{font-family:var(--hand);font-size:24px;color:var(--ink-soft)}
+.cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--hand);font-weight:700;font-size:22px;padding:6px 22px;border:2px solid var(--ink);border-radius:40px;box-shadow:3px 3px 0 var(--ink);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.btn svg{width:20px;height:20px}
+.btn-ink{background:var(--yellow)}
+.btn-li{background:#fff;color:#0a66c2}
+@media (max-width:640px){.badge{width:min(230px,62vw)}.strap{height:clamp(70px,11vh,110px)}.hello{margin-top:22px}.btn{font-size:20px;padding:5px 18px}}
 .scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-family:var(--hand);font-size:18px;color:var(--ink-soft);display:flex;flex-direction:column;align-items:center;gap:2px}
 .scroll-hint svg{width:16px;animation:bob 1.6s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(6px)}}
@@ -266,6 +273,10 @@ footer{padding:120px clamp(16px,4vw,40px) 40px;text-align:center;overflow:hidden
     <div class="hi">hello!! 👋</div>
     <h1>I'M <span data-c="nameUpper"></span></h1>
     <p data-c="tagline"></p>
+    <div class="cta">
+      <a href="#contact" class="btn btn-ink">Hire me →</a>
+      <a class="btn btn-li js-linkedin" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3zM9.5 9.75h3.8v1.5h.06c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.1v5.45h-4v-4.83c0-1.15-.02-2.63-1.6-2.63-1.6 0-1.85 1.25-1.85 2.55v4.91h-4z"/></svg>LinkedIn</a>
+    </div>
   </div>
   <a href="#work" class="scroll-hint">scroll<svg viewBox="0 0 16 24"><path d="M8 2v18M2 14l6 6 6-6" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"/></svg></a>
 </section>
@@ -372,6 +383,7 @@ footer{padding:120px clamp(16px,4vw,40px) 40px;text-align:center;overflow:hidden
   <div class="foot">
     <a href="#top" data-c="name"></a>
     <nav><a href="#about">about</a><a href="#work">work</a><a href="#lab">services</a><a href="#contact">contact</a></nav>
+    <a class="js-linkedin" target="_blank" rel="noopener">LinkedIn ↗</a>
     <small>© <span id="yr"></span> · built with love (and a lot of hooks)</small>
   </div>
 </footer>
@@ -453,6 +465,8 @@ document.querySelectorAll('[data-c]').forEach(el => {
   else if (fill[k] != null) el.textContent = fill[k];
 });
 $('#yr').textContent = new Date().getFullYear();
+const li = CONFIG.socials.find(s => s.label === 'linkedin');
+document.querySelectorAll('.js-linkedin').forEach(a => li ? a.href = li.url : a.remove());
 $('#socials').innerHTML = CONFIG.socials.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join('');
 
 // projects
